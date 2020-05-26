@@ -1,0 +1,82 @@
+{% extends 'template.html' %}
+{% block title %}用户列表{% endblock %}
+
+{% block right %}
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>用户管理页面</span>
+    </div>
+    <div class="search">
+        <form id="myform" action="/user/search" method="post">
+            <span>用户名：</span>
+            <input id="sear" name="sear" type="text" placeholder="请输入用户名"/>
+            <input id="cx" type="button" value="查询" onclick="search()"/>
+            <a href="/user/add">添加用户</a>
+        </form>
+    </div>
+    <!--用户-->
+    <table class="providerTable" cellpadding="0" cellspacing="0">
+        <tr class="firstTr">
+            <th width="10%">用户编码</th>
+            <th width="20%">用户名称</th>
+            <th width="10%">性别</th>
+            <th width="10%">年龄</th>
+            <th width="10%">电话</th>
+            <th width="10%">用户类型</th>
+            <th width="30%">操作</th>
+        </tr>
+        {% for u in user %}
+            {% load extra_filters %}
+            <tr>
+                <td>{{ u.code }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.sex }}</td>
+                <td>{{ u.birth|birth }}</td>
+                <td>{{ u.tel }}</td>
+                <td>{{ u.s_type }}</td>
+                <td>
+                    <a href="/user/detail/{{ u.id }}"><img src="/static/img/read.png" alt="查看" title="查看"/></a>
+                    <a href="/user/update/{{ u.id }}"><img src="/static/img/xiugai.png" alt="修改" title="修改"/></a>
+                    <a href="javascript:void(0)" class="removeUser" onclick="del_user({{ u.id }})"><img
+                            src="/static/img/schu.png" alt="删除" title="删除"/></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+{% endblock %}
+{% block del %}
+    <div class="zhezhao"></div>
+    <div class="remove" id="removeUse">
+        <div class="removerChid">
+            <h2>提示</h2>
+            <div class="removeMain">
+                <p>你确定要删除该用户吗？</p>
+                <a href="/user/index" id="yes">确定</a>
+                <a href="javascript:void(0)" id="no">取消</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function del_user(id) {
+            $("#yes").click(function () {
+                $.ajax({
+                    url: "/user/del/" + id,
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+
+                    }
+                })
+            })
+        }
+
+        $(function () {
+            $("#cx").click(function () {
+                $("#myform").submit()
+            })
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "template.html" %}
+
+{% block title %}供应商管理{% endblock %}
+
+{% block right %}
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>供应商管理页面</span>
+    </div>
+    <form action="/sup/search"id="myform" method="post" autocomplete="off" enctype="multipart/form-data">
+        <div class="search">
+            <span>供应商名称：</span>
+            <input type="text" id="search" name="search" placeholder="请输入供应商的名称"/>
+            <input type="button" id="query" onclick="search()" value="查询"/>
+            <a href="/sup/provideradd">添加供应商</a>
+        </div>
+    </form>
+    <!--供应商操作表格-->
+    <table class="providerTable" cellpadding="0" cellspacing="0">
+        <tr class="firstTr">
+            <th width="10%">供应商编码</th>
+            <th width="20%">供应商名称</th>
+            <th width="10%">联系人</th>
+            <th width="10%">联系电话</th>
+            <th width="10%">传真</th>
+            <th width="10%">创建时间</th>
+            <th width="30%">操作</th>
+        </tr>
+        {% for sup in data %}
+        <tr>
+            <td>{{ sup.code }}</td>
+            <td>{{ sup.s_name }}</td>
+            <td>{{ sup.contacts }}</td>
+            <td>{{ sup.tel }}</td>
+            <td>{{ sup.fax }}</td>
+            <td>{{ sup.create_time|date:"Y-m-d H:i:s" }}</td>
+            <td>
+                <a href="/sup/providerview/{{ sup.id }}"><img src="/static/img/read.png" alt="查看" title="查看"/></a>
+                <a href="/sup/providerupdate/{{ sup.id }}"><img src="/static/img/xiugai.png" alt="修改" title="修改"/></a>
+                <a href="javascript:void(0)" onclick="del({{ sup.id }})" class="removeProvider"><img src="/static/img/schu.png" alt="删除" title="删除"/></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block del %}
+<div class="zhezhao"></div>
+<div class="remove" id="removeProv">
+   <div class="removerChid">
+       <h2>提示</h2>
+       <div class="removeMain" >
+           <p>你确定要删除该供应商吗？</p>
+           <a href="/providerlist" id="yes">确定</a>
+           <a href="#" id="no">取消</a>
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    $("#query").on("click",function () {
+        var search=$("#search").val()
+        if(search==""||search==null){
+            alert("请输入要查询内容")
+            return;
+        }
+        $("#myform").submit()
+    })
+
+    function del(id) {
+        $("#yes").click(function () {
+            $.ajax({
+                url: "/sup/del/"+id,
+                method:"GET",
+                dataType: "json",
+                success:function (data) {
+
+                }
+            })
+        })
+
+
+    }
+
+
+</script>
+{% endblock %}
+
+
+

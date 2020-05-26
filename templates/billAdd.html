@@ -1,0 +1,125 @@
+{% extends "template.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block right %}
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>账单管理页面 >> 订单添加页面</span>
+    </div>
+    <div class="providerAdd">
+        <form action="/bill/billAdd" method="post" id="myform" autocomplete="off" enctype="multipart/form-data">
+            <!--div的class 为error是验证错误，ok是验证成功-->
+            <div class="">
+                <label for="billId">订单编码：</label>
+                <input type="text" name="code" id="code"  onblur="check_code(this)" required/>
+                <span>{{ msg }}</span>
+                <span>*请输入订单编码</span>
+            </div>
+            <div>
+                <label for="billName">商品名称：</label>
+                <input type="text" name="s_name" id="s_name" required/>
+                <span></span>
+                <span>*请输入商品名称</span>
+            </div>
+            <div>
+                <label for="billCom">商品单位：</label>
+                <input type="text" name="unit" id="unit" required/>
+                <span></span>
+                <span>*请输入商品单位</span>
+
+            </div>
+            <div>
+                <label for="billNum">商品数量：</label>
+                <input type="text" name="num" id="num" required/>
+                <span></span>
+                <span>*请输入大于0的正自然数，小数点后保留2位</span>
+            </div>
+            <div>
+                <label for="money">总金额：</label>
+                <input type="text" name="price" id="price" required/>
+                <span></span>
+                <span>*请输入大于0的正自然数，小数点后保留2位</span>
+            </div>
+            <div>
+                <label>供应商：</label>
+                <select name="sup_name">
+                    <option value="">--请选择相应的提供商--</option>
+                    {% for s in sup %}
+                        <option value="{{ s.s_name }}">{{ s.s_name }}</option>
+                    {% endfor %}
+
+                </select>
+                <span>*请选择供应商</span>
+            </div>
+            <div>
+                <label>是否付款：</label>
+                <input type="radio" name="state" value="未付款" id="state"/>未付款
+                <input type="radio" name="state" value="已付款" id="state" checked/>已付款
+            </div>
+            <div class="providerAddBtn">
+                <!--<a href="#">保存</a>-->
+                <!--<a href="billList.html">返回</a>-->
+                <input type="button" value="保存" id="uploadBtn"/>
+                <input type="button" value="返回" onclick="history.back(-1)"/>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        function check_code(tag) {
+            let code = tag.value;
+            $.ajax({
+                url: '/bill/check/' + code,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $(tag).next().text(data.msg)
+                    $(tag).data("check", data.status)
+                }
+            })
+        }
+
+        $(function () {
+            $("#uploadBtn").on("click", function () {
+                // 判断用户是否点击了 同意按钮
+                let code = $("#code").val()
+                let regex = /^[0-9a-zA-Z]*$/
+                let reg = /^[0-9]*$/
+                // 提交表单
+                if (!regex.test(code)) {
+                    $("#code").next().text("订单编码输入有误")
+                    return;
+                }
+                if (!$('#code').data("check")) {
+                    return;
+                }
+                $("#code").next().text("")
+                let s_name = $("#s_name").val()
+                if (s_name == "" || s_name == null) {
+                    $("#s_name").next().text("请输入商品名称");
+                    return false;
+                }
+                let unit = $("#unit").val()
+                if (unit == "" || unit == null) {
+                    $("#unit").next().text("请输入商品单位");
+                    return false;
+                }
+                let num = $("#num").val()
+                if (!regex.test(num)) {
+                    $("#num").next().text("请输入商品数量");
+                    return false;
+                }
+
+                let price = $("#price").val()
+                if (!regex.test(price)) {
+                    $("#price").next().text("请输入总金额");
+                    return false;
+                }
+                $("#myform").submit()
+            })
+        })
+    </script>
+{% endblock %}

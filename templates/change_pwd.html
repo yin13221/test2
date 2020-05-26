@@ -1,0 +1,66 @@
+{% extends 'template.html' %}
+{% block title %}用户列表{% endblock %}
+
+{% block right %}
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>密码修改页面</span>
+    </div>
+    <div class="providerAdd">
+        <form id="myform" action="/change_pwd" method="post">
+            <!--div的class 为error是验证错误，ok是验证成功-->
+            <div class="">
+                <label for="oldPassword">旧密码：</label>
+                <input type="password" name="oldPassword" id="oldPassword" required/>
+                <span>*请输入原密码</span>
+            </div>
+            <div>
+                <label for="newPassword">新密码：</label>
+                <input type="password" name="newPassword" id="newPassword" required/>
+                <span>*请输入新密码</span>
+            </div>
+            <div>
+                <label for="reNewPassword">确认新密码：</label>
+                <input type="password" name="reNewPassword" id="reNewPassword" required/>
+                <span>*请输入新确认密码，保证和新密码一致</span>
+
+            </div>
+            <span style="position: fixed;color: red;top: 290px;left: 400px">{{ msg }}</span>
+            <div class="providerAddBtn">
+                <!--<a href="#">保存</a>-->
+                <input id="bc" type="button" value="保存"/>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(function () {
+            $("#bc").click(function () {
+                let oldPassword = $("#oldPassword").val();
+                let len = oldPassword.length;
+                if (len < 6 || len > 20) {
+                    $("#oldPassword").next().text("密码长度不正确");
+                    return;
+                }
+                $("#oldPassword").next().text("");
+                let newPassword = $("#newPassword").val();
+                let len1 = newPassword.length;
+                if (len1 < 6 || len1 > 20) {
+                    $("#newPassword").next().text("密码长度不正确");
+                    return;
+                }
+                $("#newPassword").next().text("");
+                // 获取 确认密码
+                let confirmPass = $("#reNewPassword").val();
+
+                if (confirmPass != newPassword) {
+                    $("#reNewPassword").next().text("两次密码输入的不一致");
+                    return
+                }
+                $("#reNewPassword").next().text("");
+                $("#myform").submit()
+            })
+        })
+    </script>
+{% endblock %}

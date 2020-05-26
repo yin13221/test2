@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+
+{% block title %}首页{% endblock %}
+{% block cs %}
+
+{% endblock %}
+
+{% block right %}
+    <img class="wColck" src="/static/img/clock.jpg" alt=""/>
+    <div class="wFont">
+        <h2>{{ request.session.LOGIN_LOCAL_FLAG.username }}</h2>
+        <p>欢迎来到超市账单管理系统!</p>
+        <span class="hours"></span>
+    </div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+{% block title %}供应商详情{% endblock %}
+
+{% block right %}
+    <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>供应商管理页面 >> 信息查看</span>
+        </div>
+        <div class="providerView">
+            <p><strong>供应商编码：</strong><span>{{ data.code }}</span></p>
+            <p><strong>供应商名称：</strong><span>{{ data.s_name }}</span></p>
+            <p><strong>联系人：</strong><span>{{ data.contacts }}</span></p>
+            <p><strong>联系电话：</strong><span>{{ data.tel }}</span></p>
+            <p><strong>传真：</strong><span>{{ data.fax }}</span></p>
+            <p><strong>描述：</strong><span>{{ data.s_desc }}</span></p>
+            <a href="/providerlist">返回</a>
+        </div>
+{% endblock %}

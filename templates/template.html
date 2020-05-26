@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/public.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <title>{% block title %}{% endblock %}</title>
+	<script src="/static/js/jquery.js"></script>
+    <script src="/static/js/js.js"></script>
+    <script src="/static/js/time.js"></script>
+    {% block cs %}{% endblock %}
+</head>
+
+<body>
+    {% include "nav.html" %}
+
+    <!-- 网站主体 -->
+    <section class="publicMian">
+        <div class="left">
+            <h2 class="leftH2"><span class="span1"></span>功能列表 <span></span></h2>
+            <nav>
+                <ul class="list">
+                    <li ><a href="/billList">账单管理</a></li>
+                    <li><a href="/providerlist">供应商管理</a></li>
+                    <li><a href="/user/index">用户管理</a></li>
+                    <li><a href="/change_pwd">密码修改</a></li>
+                    <li><a href="/logout">退出系统</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="right">
+            {% block right %}{% endblock %}
+        </div>
+    </section>
+    {% block del %}{% endblock %}
+
+    {% block script %}{% endblock %}
+    <script>
+        document.onclick = function (e) {
+            {#console.log('点击', e.clientX, e.clientY);#}
+
+            let img = document.createElement('img');
+            document.body.appendChild(img);
+
+            let my1= setInterval(function  () {
+                img.src = '/static/img/1.png';
+                img.style.position = 'absolute';
+                let width = Math.random()*30+30;
+                img.style.width=width+'px';
+                img.style.left = e.clientX-width/2+'px';
+                img.style.top = e.clientY-width/2+'px';
+            },100)
+
+            let timeOut = setTimeout(function () {
+                img.remove();
+            }, 1000)
+        }
+        $(function () {
+            var txt = "<span class='txt'></span>";
+            $('body').append(txt);
+            var txted = $(".txt");
+            txted.css({
+                position: "absolute",
+                color: "#008ed4"
+            });
+            var Animated = function (x) {
+                x.stop().animate({
+                    top: "-=80px",
+                    opacity: '1'
+                }, 500, function () {
+                    $(this).animate({
+                        opacity: "0"
+                    }, 500);
+                });
+            };
+            $(document).on("click", function (e) {
+                var attr = ["自由", "民主", "富强", "希望", "和平", "积极", "向上", "进取"];
+                var mathText = attr[Math.floor(Math.random() * attr.length)];
+                //获取鼠标的位置
+                var x = e.pageX - 16 + "px";
+                var y = e.pageY - 18 + "px";
+                txted.text(mathText);
+                txted.css({
+                    "left": x,
+                    "top": y
+                });
+                Animated(txted);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

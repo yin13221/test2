@@ -1,0 +1,19 @@
+{% extends 'template.html' %}
+{% block title %}用户详情{% endblock %}
+{% block right %}
+    <div class="location">
+        <strong>你现在所在的位置是:</strong>
+        <span>用户管理页面 >> 用户信息查看页面</span>
+    </div>
+    <div class="providerView">
+        <p><strong>用户编号：</strong><span>{{user.code}}</span></p>
+        <p><strong>用户名称：</strong><span>{{user.username}}</span></p>
+        <p><strong>用户性别：</strong><span>{{user.sex}}</span></p>
+        <p><strong>出生日期：</strong><span>{{user.birth}}</span></p>
+        <p><strong>用户电话：</strong><span>{{user.tel}}</span></p>
+        <p><strong>用户地址：</strong><span>{{user.addr}}</span></p>
+        <p><strong>用户类别：</strong><span>{{user.s_type}}</span></p>
+
+        <a href="/user/index">返回</a>
+    </div>
+{% endblock %}
